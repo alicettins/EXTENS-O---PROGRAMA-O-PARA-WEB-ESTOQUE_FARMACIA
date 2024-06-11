@@ -1,0 +1,17 @@
+{
+  "name": "extens-o---programa-o-para-web-estoque_farmacia",
+  "version": "1.0.0",
+  "description": "O projeto que será apresentado foi desenvolvido por alunos da Universidade Católica de Brasília (UCB). O presente estudo tem como objetivo solução automatizada para gerenciamento do estoque de farmácias, atualizando a eficiência, reduzindo interrupções e eliminando distorções.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mustache-express": "^1.3.2",
+    "sequelize": "^6.31.1",
+    "sqlite3": "^5.1.6"
+  }
+}
