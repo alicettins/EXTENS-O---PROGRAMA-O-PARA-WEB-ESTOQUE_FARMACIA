@@ -1,4 +1,5 @@
-const Produto = require('../models/produto');
+//const Produto = require('../models/produto');
+const Produto = require('../model/produto');
 
 function listarProdutosView(req, res) {
   Produto.find()

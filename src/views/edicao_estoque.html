@@ -15,7 +15,7 @@
                 <h1 class="mt-5">Edição de Estoque</h1>
             </div>
             <div class="offset-md-4 col-md-4">
-                <form action="/editar_estoque/<%= estoque.id %>" method="post">
+                <form action="/editar_estoque/%= estoque.id %>" method="post">
                     <div class="mt-3 mb-3">
                         <label for="quantidade" class="form-label">Nova Quantidade:</label>
                         <input type="number" class="form-control" id="quantidade" name="quantidade" value="<%= estoque.quantidade %>" min="0" required>

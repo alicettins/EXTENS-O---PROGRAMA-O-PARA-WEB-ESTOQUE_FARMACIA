@@ -1,4 +1,5 @@
-const Usuario = require('../models/usuario');
+//const Usuario = require('../models/usuario');
+const Usuario = require('../model/usuario');
 
 function indexView(req, res){
     res.render('index.html');

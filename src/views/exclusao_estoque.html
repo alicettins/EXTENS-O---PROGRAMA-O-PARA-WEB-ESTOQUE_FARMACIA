@@ -19,7 +19,7 @@
                     <p>Você está prestes a excluir o item de estoque <strong><%= estoque.produto.nome %></strong> com quantidade <strong><%= estoque.quantidade %></strong>.</p>
                     <p>Esta ação não pode ser desfeita. Tem certeza de que deseja continuar?</p>
                 </div>
-                <form action="/excluir_estoque/<%= estoque.id %>" method="post">
+                <form action="/excluir_estoque/%= estoque.id %>" method="post">
                     <div class="mt-3 text-center">
                         <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
                         <a href="/" class="btn btn-secondary ms-2">Cancelar</a>
