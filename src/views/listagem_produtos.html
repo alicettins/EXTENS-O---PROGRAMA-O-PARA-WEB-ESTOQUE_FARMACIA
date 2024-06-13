@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        % produtos.forEach(function(produto) { %>
+                        <% produtos.forEach(function(produto) { %>
                             <tr>
                                 <th scope="row"><%= produto.id %></th>
                                 <td><%= produto.nome %></td>
@@ -37,7 +37,7 @@
                                     <a href="/excluir_produto/<%= produto.id %>" class="btn btn-danger btn-sm">Excluir</a>
                                 </td>
                             </tr>
-                        % }); %>
+                        <% }); %>
                     </tbody>
                 </table>
             </div>
