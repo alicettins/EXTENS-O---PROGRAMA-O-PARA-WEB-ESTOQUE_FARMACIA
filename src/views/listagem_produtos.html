@@ -33,8 +33,8 @@
                                 <td><%= produto.data_validade.toISOString().split('T')[0] %></td>
                                 <td><%= produto.quantidade_estoque %></td>
                                 <td>
-                                    <a href="/produtos/editar>" class="btn btn-sm btn-primary">Editar</a>
-                                    <form action="/produtos/excluir>" method="POST" style="display: inline;">
+                                    <a href="/produtos/editar/<%= produto.id %>" class="btn btn-sm btn-primary">Editar</a>
+                                    <form action="/produtos/excluir/<%= produto.id %>" method="POST" style="display: inline;">
                                         <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                                     </form>
                                 </td>
