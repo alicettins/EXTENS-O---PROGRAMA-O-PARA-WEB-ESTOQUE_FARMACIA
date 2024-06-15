@@ -15,16 +15,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
 
- 
 app.use('/usuarios', usuarioRoutes);
 app.use('/produtos', produtoRoutes);
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
-});
 
-db.sync()
+db.sync({ force: false }) 
     .then(() => {
         console.log('Banco de dados sincronizado');
+        app.listen(port, () => {
+            console.log(`Servidor rodando na porta ${port}`);
+        });
     })
     .catch((err) => {
         console.error('Erro ao sincronizar o banco de dados:', err);

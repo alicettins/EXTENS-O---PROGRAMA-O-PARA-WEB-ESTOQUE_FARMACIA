@@ -1,4 +1,5 @@
-const { Sequelize } = require('sequelize');
+// src/models/usuario.js
+const Sequelize = require('sequelize');
 const db = require('../db');
 
 const Usuario = db.define('usuario', {
@@ -17,8 +18,17 @@ const Usuario = db.define('usuario', {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    perfil: {
-        type: Sequelize.INTEGER,
+   
+    id_funcionario: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    cargo: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    nome: {
+        type: Sequelize.STRING(50),
         allowNull: false,
     },
 });
