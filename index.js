@@ -6,7 +6,7 @@ const produtoRoutes = require('./src/routes/produtoRoutes');
 const db = require('./src/db');
 
 const app = express();
-const port = 8080;
+const PORT = 8080;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -21,8 +21,8 @@ app.use('/produtos', produtoRoutes);
 db.sync({ force: false }) 
     .then(() => {
         console.log('Banco de dados sincronizado');
-        app.listen(port, () => {
-            console.log(`Servidor rodando na porta ${port}`);
+        app.listen(PORT, () => {
+            console.log(`Servidor rodando na porta ${PORT}`);
         });
     })
     .catch((err) => {
