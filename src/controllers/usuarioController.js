@@ -1,79 +1,82 @@
-const Usuario = require('../models/usuario');
+const Usuario = require('../models/usuario'); 
+
+function indexView(req, res) {
+    res.render('index.html');
+}
+
+function criarContaView(req, res) {
+    res.render('usuario_cadastro.html');
+}
 
 function cadastrarUsuario(req, res) {
-    const { email, senha, login, id_funcionario, cargo, nome } = req.body;
-    const novoUsuario = new Usuario({ email, senha, login, id_funcionario, cargo, nome });
+    let usuario = {
+        email: req.body.email,
+        senha: req.body.senha,
+        login: req.body.login,
+        id_funcionario: req.body.id_funcionario,
+        cargo: req.body.cargo,
+        nome: req.body.nome
+    };
 
-    novoUsuario.save()
-        .then(() => {
-            res.redirect('/?cadastrar_usuario=true');
-        })
-        .catch((err) => {
-            console.error(err);
-            res.redirect('/?cadastrar_usuario=false');
-        });
+    Usuario.create(usuario).then(() => {
+        res.redirect('/usuarios/criar_conta?cadastrar_usuario=true');
+    }).catch((err) => {
+        console.log(err);
+        res.redirect('/usuarios/criar_conta?cadastrar_usuario=false');
+    });
 }
 
 function listarUsuarios(req, res) {
-    Usuario.findAll()
-        .then(usuarios => {
-            res.json(usuarios);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({ error: 'Erro ao listar usuários' });
-        });
+    Usuario.findAll().then((usuarios) => {
+        res.render('usuarios.html', { usuarios: usuarios });
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send('Erro ao listar usuários');
+    });
 }
 
 function buscarUsuarioPorId(req, res) {
-    const { id } = req.params;
-
-    Usuario.findByPk(id)
-        .then(usuario => {
-            if (!usuario) {
-                res.status(404).json({ error: 'Usuário não encontrado' });
-            } else {
-                res.json(usuario);
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({ error: 'Erro ao buscar usuário por ID' });
-        });
+    Usuario.findByPk(req.params.id).then((usuario) => {
+        if (usuario) {
+            res.render('usuario.html', { usuario: usuario });
+        } else {
+            res.status(404).send('Usuário não encontrado');
+        }
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send('Erro ao buscar usuário');
+    });
 }
 
 function atualizarUsuario(req, res) {
-    const { id } = req.params;
-    const { email, senha, login, id_funcionario, cargo, nome } = req.body;
-
-    Usuario.update({ email, senha, login, id_funcionario, cargo, nome }, {
-        where: { id: id }
-    })
-        .then(() => {
-            res.json({ message: 'Usuário atualizado com sucesso' });
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({ error: 'Erro ao atualizar usuário' });
-        });
+    Usuario.update(req.body, { where: { id: req.params.id } }).then((rowsUpdated) => {
+        if (rowsUpdated[0] > 0) {
+            res.redirect('/usuarios/' + req.params.id);
+        } else {
+            res.status(404).send('Usuário não encontrado');
+        }
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send('Erro ao atualizar usuário');
+    });
 }
 
 function deletarUsuario(req, res) {
-    const { id } = req.params;
-
-    Usuario.destroy({
-        where: { id: id }
-    })
-        .then(() => {
-            res.json({ message: 'Usuário deletado com sucesso' });
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).json({ error: 'Erro ao deletar usuário' });
-        });
+    Usuario.destroy({ where: { id: req.params.id } }).then((rowsDeleted) => {
+        if (rowsDeleted > 0) {
+            res.redirect('/usuarios');
+        } else {
+            res.status(404).send('Usuário não encontrado');
+        }
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send('Erro ao deletar usuário');
+    });
 }
 
 module.exports = {
+    indexView,
+    criarContaView,
     cadastrarUsuario,
     listarUsuarios,
     buscarUsuarioPorId,

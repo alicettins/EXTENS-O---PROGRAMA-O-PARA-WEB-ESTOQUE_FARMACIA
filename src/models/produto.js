@@ -1,4 +1,3 @@
-// src/models/produto.js
 const Sequelize = require('sequelize');
 const db = require('../db');
 

@@ -1,4 +1,3 @@
-// src/models/usuario.js
 const Sequelize = require('sequelize');
 const db = require('../db');
 
