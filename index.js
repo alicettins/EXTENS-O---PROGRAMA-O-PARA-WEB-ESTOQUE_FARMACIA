@@ -1,37 +1,26 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const methodOverride = require('method-override');
-const usuarioRoutes = require('./src/routes/usuarioRoutes');
-const produtoRoutes = require('./src/routes/produtoRoutes');
-const mainController = require('./src/controllers/mainController');
+const mustacheExpress = require('mustache-express');
 const db = require('./src/db');
-
 const app = express();
-const port = 8080;
+const produtoRoutes = require('./src/routes/produtoRoutes');
+const usuarioRoutes = require('./src/routes/usuarioRoutes');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.set('views', path.join(__dirname, 'src', 'views'));
+app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
-app.engine('html', require('ejs').renderFile);
-
-app.use('/usuarios', usuarioRoutes);
+app.set('views', __dirname + '/src/views');
+app.use(express.urlencoded({ extended: true }));
 app.use('/produtos', produtoRoutes);
+app.use('/usuarios', usuarioRoutes);
 
-app.get('/', mainController.homeView);
-app.get('/login', mainController.loginView);
+db.sync()
+  .then(() => {
+    console.log('Banco de Dados conectado');
 
-db.sync({ force: false })
-    .then(() => {
-        console.log('Banco de dados sincronizado');
-        app.listen(port, () => {
-            console.log(`Servidor rodando na porta ${port}`);
-        });
-    })
-    .catch((err) => {
-        console.error('Erro ao sincronizar o banco de dados:', err);
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+      console.log(`App rodando na porta ${PORT}`);
     });
+  })
+  .catch((err) => {
+    console.error('Erro ao conectar ao banco de dados:', err);
+  });
