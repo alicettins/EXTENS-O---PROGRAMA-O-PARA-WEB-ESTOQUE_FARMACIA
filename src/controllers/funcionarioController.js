@@ -1,7 +1,13 @@
 const Funcionario = require('../models/funcionario');
 
-function indexView(req, res) {
-    res.render('index.html');
+async function indexView(req, res) {
+    try {
+        const funcionarios = await Funcionario.findAll();
+        res.render('funcionario.html', { funcionarios });
+    } catch (error) {
+        console.error('Erro ao buscar funcionários:', error);
+        res.status(500).send('Erro ao buscar funcionários');
+    }
 }
 
 function criarContaView(req, res) {
@@ -25,26 +31,16 @@ async function cadastrarFuncionario(req, res) {
     }
 }
 
-async function listarFuncionarios(req, res) {
-    try {
-        const funcionarios = await Funcionario.findAll();
-        res.json(funcionarios);
-    } catch (error) {
-        console.error('Erro ao buscar funcionários:', error);
-        res.status(500).send('Erro ao buscar funcionários');
-    }
-}
-
-async function buscarFuncionarioPorId(req, res) {
+async function exibirFormularioEdicao(req, res) {
     try {
         const funcionario = await Funcionario.findByPk(req.params.id);
         if (!funcionario) {
             return res.status(404).send('Funcionário não encontrado');
         }
-        res.json(funcionario);
+        res.render('funcionario-editar.html', { funcionario });
     } catch (error) {
-        console.error('Erro ao buscar funcionário por ID:', error);
-        res.status(500).send('Erro ao buscar funcionário por ID');
+        console.error('Erro ao buscar funcionário para edição:', error);
+        res.status(500).send('Erro ao buscar funcionário para edição');
     }
 }
 
@@ -68,7 +64,20 @@ async function atualizarFuncionario(req, res) {
     }
 }
 
-async function deletarFuncionario(req, res) {
+async function exibirConfirmacaoExclusao(req, res) {
+    try {
+        const funcionario = await Funcionario.findByPk(req.params.id);
+        if (!funcionario) {
+            return res.status(404).send('Funcionário não encontrado');
+        }
+        res.render('funcionario-excluir.html', { funcionario });
+    } catch (error) {
+        console.error('Erro ao buscar funcionário para exclusão:', error);
+        res.status(500).send('Erro ao buscar funcionário para exclusão');
+    }
+}
+
+async function excluirFuncionario(req, res) {
     try {
         const funcionario = await Funcionario.findByPk(req.params.id);
         if (!funcionario) {
@@ -78,8 +87,8 @@ async function deletarFuncionario(req, res) {
         await funcionario.destroy();
         res.redirect('/listar_funcionarios');
     } catch (error) {
-        console.error('Erro ao deletar funcionário:', error);
-        res.status(500).send('Erro ao deletar funcionário');
+        console.error('Erro ao excluir funcionário:', error);
+        res.status(500).send('Erro ao excluir funcionário');
     }
 }
 
@@ -89,7 +98,7 @@ async function detalhesFuncionario(req, res) {
         if (!funcionario) {
             return res.status(404).send('Funcionário não encontrado');
         }
-        res.json(funcionario);
+        res.render('funcionario-detalhes.html', { funcionario });
     } catch (error) {
         console.error('Erro ao buscar detalhes do funcionário:', error);
         res.status(500).send('Erro ao buscar detalhes do funcionário');
@@ -100,9 +109,9 @@ module.exports = {
     indexView,
     criarContaView,
     cadastrarFuncionario,
-    listarFuncionarios,
-    buscarFuncionarioPorId,
+    exibirFormularioEdicao,
     atualizarFuncionario,
-    deletarFuncionario,
+    exibirConfirmacaoExclusao,
+    excluirFuncionario,
     detalhesFuncionario
 };

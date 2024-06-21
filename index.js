@@ -1,7 +1,7 @@
 const express = require('express');
 const mustacheExpress = require('mustache-express');
 const session = require('express-session');
-const db = require('./src/db');
+const db = require('./src/db'); // Verifique o caminho correto
 
 const app = express();
 
@@ -21,12 +21,14 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use('/clientes', require('./src/routes/clienteRoutes'));
-app.use('/funcionarios', require('./src/routes/funcionarioRoutes'));
-app.use('/estoque', require('./src/routes/entradaestoqueRoutes'));
-app.use('/produtos', require('./src/routes/produtoRoutes'));
-app.use('/transacoes', require('./src/routes/transacaoRoutes'));
+// Rotas
+app.use('/', require('./src/routes/funcionarioRoutes'));
+app.use('/', require('./src/routes/entradaestoqueRoutes'));
+app.use('/', require('./src/routes/produtoRoutes'));
+app.use('/', require('./src/routes/transacaoRoutes'));
+app.use('/', require('./src/routes/autenticacaoRoutes'));
 
+// Sincronização do banco de dados
 db.sync()
     .then(() => {
         const app_port = 8080;
@@ -37,3 +39,5 @@ db.sync()
     .catch((err) => {
         console.error('Erro ao conectar ao banco de dados:', err);
     });
+
+   

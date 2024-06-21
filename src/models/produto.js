@@ -1,10 +1,11 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
-const Produto = db.define('produto', {
-    id_produto: {
-        type: Sequelize.STRING,
-        primaryKey: true
+const Produto = db.define('produtos', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
     nome: {
         type: Sequelize.STRING(50),
@@ -36,8 +37,8 @@ const Produto = db.define('produto', {
     },
     data_entrada: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
+        allowNull: true, // Alterado para permitir null
+        defaultValue: Sequelize.NOW // Valor padrão é a data atual
     }
 });
 
