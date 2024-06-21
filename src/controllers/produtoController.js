@@ -1,126 +1,111 @@
-const path = require('path');
 const Produto = require('../models/produto');
 
+async function listarProdutosView(req, res) {
+    try {
+        const produtos = await Produto.findAll();
+        res.render('produto/produto-listar.html', { produtos });
+    } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        res.status(500).send('Erro ao buscar produtos');
+    }
+}
+
 function produtoCadastroView(req, res) {
-  res.sendFile(path.join(__dirname, '..', 'views', 'produto_cadastro.html'));
+    res.render('produto/produto-novo.html');
 }
 
-function listarProdutosView(req, res) {
-  Produto.findAll()
-    .then(produtos => {
-      res.render('produtos.html', { produtos });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Erro ao listar produtos');
-    });
+async function cadastrarProduto(req, res) {
+    try {
+        let novoProduto = {
+            nome: req.body.nome,
+            descricao: req.body.descricao,
+            preco: req.body.preco,
+            quantidade_minima: req.body.quantidade_minima,
+            quantidade_em_estoque: req.body.quantidade_em_estoque,
+            data_validade: req.body.data_validade,
+            data_saida: req.body.data_saida,
+            data_entrada: req.body.data_entrada
+        };
+        
+        await Produto.create(novoProduto);
+        res.redirect('/listar_produto');
+    } catch (error) {
+        console.error('Erro ao cadastrar produto:', error);
+        res.status(500).send('Erro ao cadastrar produto');
+    }
 }
 
-function cadastrarProduto(req, res) {
-  const { nome, descricao, quantidade_minima, quantidade_estoque, preco, data_validade, data_entrada, data_saida } = req.body;
-  const novoProduto = {
-    nome,
-    descricao,
-    quantidade_minima,
-    quantidade_estoque,
-    preco,
-    data_validade,
-    data_entrada,
-    data_saida
-  };
-
-  Produto.create(novoProduto)
-    .then(() => {
-      res.redirect('/produtos?cadastrar_produto=true');
-    })
-    .catch((err) => {
-      console.error(err);
-      res.redirect('/produtos?cadastrar_produto=false');
-    });
+async function exibirFormularioEdicao(req, res) {
+    try {
+        const produto = await Produto.findByPk(req.params.id);
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+        res.render('produto/produto-editar.html', { produto });
+    } catch (error) {
+        console.error('Erro ao buscar produto para edição:', error);
+        res.status(500).send('Erro ao buscar produto para edição');
+    }
 }
 
-function exibirFormularioEdicao(req, res) {
-  const produtoId = req.params.id;
-  Produto.findByPk(produtoId)
-    .then(produto => {
-      if (!produto) {
-        res.status(404).send('Produto não encontrado');
-      } else {
-        res.render('produto_edicao.html', { produto });
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Erro ao buscar produto');
-    });
+async function atualizarProduto(req, res) {
+    try {
+        const produto = await Produto.findByPk(req.params.id);
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+        
+        produto.nome = req.body.nome;
+        produto.descricao = req.body.descricao;
+        produto.preco = req.body.preco;
+        produto.quantidade_minima = req.body.quantidade_minima;
+        produto.quantidade_em_estoque = req.body.quantidade_em_estoque;
+        produto.data_validade = req.body.data_validade;
+        produto.data_saida = req.body.data_saida;
+        produto.data_entrada = req.body.data_entrada;
+        
+        await produto.save();
+        res.redirect('/listar_produto');
+    } catch (error) {
+        console.error('Erro ao atualizar produto:', error);
+        res.status(500).send('Erro ao atualizar produto');
+    }
 }
 
-function atualizarProduto(req, res) {
-  const produtoId = req.params.id;
-  const { nome, descricao, quantidade_minima, quantidade_estoque, preco, data_validade, data_entrada, data_saida } = req.body;
-  const atualizacaoProduto = {
-    nome,
-    descricao,
-    quantidade_minima,
-    quantidade_estoque,
-    preco,
-    data_validade,
-    data_entrada,
-    data_saida
-  };
-
-  Produto.update(atualizacaoProduto, { where: { id: produtoId } })
-    .then((result) => {
-      if (result[0] > 0) {
-        res.redirect('/produtos/' + produtoId);
-      } else {
-        res.status(404).send('Produto não encontrado');
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Erro ao atualizar produto');
-    });
+async function excluirProduto(req, res) {
+    try {
+        const produto = await Produto.findByPk(req.params.id);
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+        
+        await produto.destroy();
+        res.redirect('/listar_produto');
+    } catch (error) {
+        console.error('Erro ao excluir produto:', error);
+        res.status(500).send('Erro ao excluir produto');
+    }
 }
 
-function excluirProduto(req, res) {
-  const produtoId = req.params.id;
-  Produto.destroy({ where: { id: produtoId } })
-    .then((result) => {
-      if (result > 0) {
-        res.redirect('/produtos');
-      } else {
-        res.status(404).send('Produto não encontrado');
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Erro ao excluir produto');
-    });
-}
-
-function detalhesProduto(req, res) {
-  const produtoId = req.params.id;
-  Produto.findByPk(produtoId)
-    .then(produto => {
-      if (!produto) {
-        res.status(404).send('Produto não encontrado');
-      } else {
-        res.render('produto.html', { produto });
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Erro ao buscar produto');
-    });
+async function detalhesProduto(req, res) {
+    try {
+        const produto = await Produto.findByPk(req.params.id);
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+        res.render('produto/produto-detalhes.html', { produto });
+    } catch (error) {
+        console.error('Erro ao buscar detalhes do produto:', error);
+        res.status(500).send('Erro ao buscar detalhes do produto');
+    }
 }
 
 module.exports = {
-  produtoCadastroView,
-  listarProdutosView,
-  cadastrarProduto,
-  exibirFormularioEdicao,
-  atualizarProduto,
-  excluirProduto,
-  detalhesProduto
+    listarProdutosView,
+    produtoCadastroView,
+    cadastrarProduto,
+    exibirFormularioEdicao,
+    atualizarProduto,
+    excluirProduto,
+    detalhesProduto
 };

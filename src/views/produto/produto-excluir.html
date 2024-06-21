@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Produto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Excluir Produto</h1>
+        <div>
+            <p><strong>Nome:</strong> {{nome}}</p>
+            <p><strong>Descrição:</strong> {{descricao}}</p>
+            <p><strong>Preço:</strong> {{preco}}</p>
+            <p><strong>Quantidade Mínima:</strong>{{quantidade_minima}}</p>
+            <p><strong>Quantidade em estoque:</strong>{{quantidade_em_estoque}}</p>
+            <p><strong>Data de validade:</strong>{{data_validade}}</p>
+        </div>
+        <p>Você tem certeza que deseja excluir este produto?</p>
+        <form action="/produto/{{id}}/excluir" method="POST">
+            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            <a href="/produto/{{id}}/detalhes" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

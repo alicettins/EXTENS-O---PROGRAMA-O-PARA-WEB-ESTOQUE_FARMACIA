@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Cliente</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Excluir Cliente</h1>
+        <div>
+            <p><strong>Nome:</strong> {{nome}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+            <p><strong>Número de Telefone:</strong> {{numero_telefone}}</p>
+            <p><strong>Data de Nascimento:</strong> {{data_nascimento}}</p>
+        </div>
+        <p>Você tem certeza que deseja excluir este cliente?</p>
+        <form action="/cliente/{{id}}/excluir" method="POST">
+            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            <a href="/cliente/{{id}}/detalhes" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

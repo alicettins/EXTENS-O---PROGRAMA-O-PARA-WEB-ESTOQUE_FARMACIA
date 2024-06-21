@@ -3,10 +3,11 @@ const router = express.Router();
 const produtoController = require('../controllers/produtoController');
 
 router.get('/listar_produto', produtoController.listarProdutosView);
-router.get('/exibir_formularioP', produtoController.produtoCadastroView);
-router.post('/cadastrar_produto', produtoController.cadastrarProduto);
-router.get('/:id/editar_produto', produtoController.exibirFormularioEdicao);
-router.put('/:id/atualiza_produto', produtoController.atualizarProduto);
-router.delete('/:id/delete_produto', produtoController.excluirProduto);
-router.get('/:id/detalhes_produto', produtoController.detalhesProduto); 
+router.get('/produto-novo', produtoController.produtoCadastroView);
+router.post('/produto-novo', produtoController.cadastrarProduto);
+router.get('/produtos/:id/editar', produtoController.exibirFormularioEdicao);
+router.post('/produtos/:id/editar', produtoController.atualizarProduto);
+router.post('/produtos/:id/excluir', produtoController.excluirProduto);
+router.get('/produtos/:id/detalhes', produtoController.detalhesProduto);
+
 module.exports = router;
