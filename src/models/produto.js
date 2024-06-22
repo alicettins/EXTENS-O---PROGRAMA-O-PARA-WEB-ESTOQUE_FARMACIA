@@ -37,8 +37,8 @@ const Produto = db.define('produtos', {
     },
     data_entrada: {
         type: Sequelize.DATE,
-        allowNull: true, // Alterado para permitir null
-        defaultValue: Sequelize.NOW // Valor padrão é a data atual
+        allowNull: true, 
+        defaultValue: Sequelize.NOW 
     }
 });
 

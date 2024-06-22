@@ -1,7 +1,7 @@
 const express = require('express');
 const mustacheExpress = require('mustache-express');
 const session = require('express-session');
-const db = require('./src/db'); // Verifique o caminho correto
+const db = require('./src/db'); 
 
 const app = express();
 
@@ -23,10 +23,9 @@ app.use(session({
 
 // Rotas
 app.use('/', require('./src/routes/funcionarioRoutes'));
-app.use('/', require('./src/routes/entradaestoqueRoutes'));
 app.use('/', require('./src/routes/produtoRoutes'));
-app.use('/', require('./src/routes/transacaoRoutes'));
 app.use('/', require('./src/routes/autenticacaoRoutes'));
+
 
 // Sincronização do banco de dados
 db.sync()

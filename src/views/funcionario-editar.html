@@ -14,19 +14,19 @@
         <form action="/funcionarios/{{funcionario.id}}/atualizar" method="POST">
             <div class="mb-1 mt-1">
                 <label for="nome" class="form-label">Nome:</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="{{nome}}" required>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{funcionario.nome}}" required>
             </div>
             <div class="mb-1">
                 <label for="cargo" class="form-label">Cargo:</label>
-                <input type="text" class="form-control" id="cargo" name="cargo" value="{{cargo}}" required>
+                <input type="text" class="form-control" id="cargo" name="cargo" value="{{funcionario.cargo}}" required>
             </div>
             <div class="mb-1">
                 <label for="salario" class="form-label">Salário:</label>
-                <input type="number" class="form-control" id="salario" name="salario" value="{{salario}}" step="0.01" required>
+                <input type="number" class="form-control" id="salario" name="salario" value="{{funcionario.salario}}" step="0.01" required>
             </div>
             <div class="mb-1">
                 <label for="dataAdmissao" class="form-label">Data de Admissão:</label>
-                <input type="date" class="form-control" id="dataAdmissao" name="data_admissao" value="{{data_admissao}}" required>
+                <input type="date" class="form-control" id="dataAdmissao" name="data_admissao" value="{{funcionario.data_admissao}}" required>
             </div>
             <button type="submit" class="btn btn-warning">Atualizar</button>
         </form>

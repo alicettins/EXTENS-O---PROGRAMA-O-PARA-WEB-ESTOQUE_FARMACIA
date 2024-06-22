@@ -1,6 +1,18 @@
 const Funcionario = require('../models/funcionario');
 
+// Renderizar a página inicial com a lista de funcionários
 async function indexView(req, res) {
+    try {
+        const funcionarios = await Funcionario.findAll();
+        res.render('index.html', { funcionarios });
+    } catch (error) {
+        console.error('Erro ao buscar funcionários:', error);
+        res.status(500).send('Erro ao buscar funcionários');
+    }
+}
+
+// Listar todos os funcionários
+async function listarFuncionarios(req, res) {
     try {
         const funcionarios = await Funcionario.findAll();
         res.render('funcionario.html', { funcionarios });
@@ -10,20 +22,17 @@ async function indexView(req, res) {
     }
 }
 
+// Renderizar formulário para criar novo funcionário
 function criarContaView(req, res) {
     res.render('funcionario-novo.html');
 }
 
+// Cadastrar um novo funcionário
 async function cadastrarFuncionario(req, res) {
     try {
-        let novoFuncionario = {
-            nome: req.body.nome,
-            cargo: req.body.cargo,
-            salario: req.body.salario,
-            data_admissao: req.body.data_admissao
-        };
+        const { nome, cargo, salario, data_admissao } = req.body;
 
-        await Funcionario.create(novoFuncionario);
+        await Funcionario.create({ nome, cargo, salario, data_admissao });
         res.redirect('/listar_funcionarios');
     } catch (error) {
         console.error('Erro ao cadastrar funcionário:', error);
@@ -31,6 +40,21 @@ async function cadastrarFuncionario(req, res) {
     }
 }
 
+// Exibir detalhes de um funcionário específico
+async function exibirDetalhesFuncionario(req, res) {
+    try {
+        const funcionario = await Funcionario.findByPk(req.params.id);
+        if (!funcionario) {
+            return res.status(404).send('Funcionário não encontrado');
+        }
+        res.render('funcionario-detalhes.html', { funcionario });
+    } catch (error) {
+        console.error('Erro ao buscar detalhes do funcionário:', error);
+        res.status(500).send('Erro ao buscar detalhes do funcionário');
+    }
+}
+
+// Renderizar formulário para editar um funcionário
 async function exibirFormularioEdicao(req, res) {
     try {
         const funcionario = await Funcionario.findByPk(req.params.id);
@@ -44,17 +68,20 @@ async function exibirFormularioEdicao(req, res) {
     }
 }
 
+// Atualizar os dados de um funcionário
 async function atualizarFuncionario(req, res) {
     try {
-        const funcionario = await Funcionario.findByPk(req.params.id);
+        const { nome, cargo, salario, data_admissao } = req.body;
+
+        let funcionario = await Funcionario.findByPk(req.params.id);
         if (!funcionario) {
             return res.status(404).send('Funcionário não encontrado');
         }
 
-        funcionario.nome = req.body.nome;
-        funcionario.cargo = req.body.cargo;
-        funcionario.salario = req.body.salario;
-        funcionario.data_admissao = req.body.data_admissao;
+        funcionario.nome = nome;
+        funcionario.cargo = cargo;
+        funcionario.salario = salario;
+        funcionario.data_admissao = data_admissao;
 
         await funcionario.save();
         res.redirect('/listar_funcionarios');
@@ -64,6 +91,7 @@ async function atualizarFuncionario(req, res) {
     }
 }
 
+// Exibir confirmação para exclusão de um funcionário
 async function exibirConfirmacaoExclusao(req, res) {
     try {
         const funcionario = await Funcionario.findByPk(req.params.id);
@@ -77,6 +105,7 @@ async function exibirConfirmacaoExclusao(req, res) {
     }
 }
 
+// Excluir um funcionário do banco de dados
 async function excluirFuncionario(req, res) {
     try {
         const funcionario = await Funcionario.findByPk(req.params.id);
@@ -92,26 +121,14 @@ async function excluirFuncionario(req, res) {
     }
 }
 
-async function detalhesFuncionario(req, res) {
-    try {
-        const funcionario = await Funcionario.findByPk(req.params.id);
-        if (!funcionario) {
-            return res.status(404).send('Funcionário não encontrado');
-        }
-        res.render('funcionario-detalhes.html', { funcionario });
-    } catch (error) {
-        console.error('Erro ao buscar detalhes do funcionário:', error);
-        res.status(500).send('Erro ao buscar detalhes do funcionário');
-    }
-}
-
 module.exports = {
     indexView,
+    listarFuncionarios,
     criarContaView,
     cadastrarFuncionario,
+    exibirDetalhesFuncionario,
     exibirFormularioEdicao,
     atualizarFuncionario,
     exibirConfirmacaoExclusao,
-    excluirFuncionario,
-    detalhesFuncionario
+    excluirFuncionario
 };
